@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FuelCalculator {
-  // ලංකාවේ වත්මන් පෙට්‍රල් මිල (මෙය අවශ්‍ය පරිදි වෙනස් කළ හැක)
+  
   static const double currentPetrolPrice = 370.0;
 
-  // 1. ඉන්ධන වියදම ගණනය කර Firebase වෙත ගබඩා කිරීමේ Function එක
+  
   Future<void> addFuelRecord({
     required double liters,
     required BuildContext context,
