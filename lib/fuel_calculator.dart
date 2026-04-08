@@ -31,7 +31,8 @@ class FuelCalculator {
       // සාර්ථක පණිවිඩයක් පෙන්වීම
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Fuel record added! Total Cost: LKR ${totalCost.toStringAsFixed(2)}"),
+          content: Text(
+              "Fuel record added! Total Cost: LKR ${totalCost.toStringAsFixed(2)}"),
           backgroundColor: Colors.green,
         ),
       );
@@ -70,6 +71,8 @@ class FuelInputWidget extends StatelessWidget {
   final TextEditingController _literController = TextEditingController();
   final FuelCalculator _calculator = FuelCalculator();
 
+  FuelInputWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -77,7 +80,7 @@ class FuelInputWidget extends StatelessWidget {
         TextField(
           controller: _literController,
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: "Enter Liters",
             prefixIcon: Icon(Icons.local_gas_station),
           ),
@@ -90,7 +93,7 @@ class FuelInputWidget extends StatelessWidget {
               _literController.clear();
             }
           },
-          child: Text("Submit Fuel Record"),
+          child: const Text("Submit Fuel Record"),
         ),
       ],
     );
