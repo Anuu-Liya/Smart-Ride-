@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-import '../models/booking.dart';
-import '../services/firestore_service.dart';
-import '../services/notification_service.dart';
+import 'models/booking.dart';
+import 'services/firestore_service.dart';
+import 'services/notification_service.dart';
 
 class BookingFuelScreen extends StatefulWidget {
   const BookingFuelScreen({super.key});
@@ -123,7 +124,8 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
     final appointment = _appointmentDateTime;
     if (appointment.isBefore(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please choose a future appointment time.')),
+        const SnackBar(
+            content: Text('Please choose a future appointment time.')),
       );
       return;
     }
@@ -182,7 +184,8 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Service appointment created successfully.')),
+        const SnackBar(
+            content: Text('Service appointment created successfully.')),
       );
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -252,14 +255,14 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
       case 'Rescheduled':
         return Colors.orange;
       default:
-        return Colors.blue;
+        return const Color.fromARGB(255, 0, 5, 9);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final appointmentText = DateFormat('EEE, dd MMM yyyy • hh:mm a')
-        .format(_appointmentDateTime);
+    final appointmentText =
+        DateFormat('EEE, dd MMM yyyy • hh:mm a').format(_appointmentDateTime);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Reminders & Booking System')),
@@ -295,7 +298,8 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                     children: [
                       const Text(
                         'Create a premium service appointment',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 6),
                       const Text(
@@ -437,7 +441,8 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                           Expanded(
                             child: _InfoActionCard(
                               title: 'Date',
-                              value: DateFormat('dd MMM yyyy').format(_selectedDate),
+                              value: DateFormat('dd MMM yyyy')
+                                  .format(_selectedDate),
                               icon: Icons.calendar_month,
                               onTap: _pickDate,
                             ),
@@ -477,7 +482,8 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                         maxLines: 3,
                         decoration: const InputDecoration(
                           labelText: 'Special notes',
-                          hintText: 'Pickup request, brake noise, engine light, etc.',
+                          hintText:
+                              'Pickup request, brake noise, engine light, etc.',
                           prefixIcon: Icon(Icons.note_alt_outlined),
                         ),
                       ),
@@ -492,7 +498,8 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                           children: [
                             const CircleAvatar(
                               backgroundColor: Color(0xFF7C3AED),
-                              child: Icon(Icons.auto_awesome, color: Colors.white),
+                              child:
+                                  Icon(Icons.auto_awesome, color: Colors.white),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -501,11 +508,13 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                                 children: [
                                   const Text(
                                     'Smart reminder flow enabled',
-                                    style: TextStyle(fontWeight: FontWeight.w700),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w700),
                                   ),
                                   Text(
                                     'A local notification will be triggered $_selectedReminderHours hour(s) before the appointment.',
-                                    style: const TextStyle(color: Colors.black54),
+                                    style:
+                                        const TextStyle(color: Colors.black54),
                                   ),
                                 ],
                               ),
@@ -522,10 +531,12 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                               ? const SizedBox(
                                   width: 18,
                                   height: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : const Icon(Icons.book_online),
-                          label: Text(_isSaving ? 'Saving...' : 'Confirm Appointment'),
+                          label: Text(
+                              _isSaving ? 'Saving...' : 'Confirm Appointment'),
                         ),
                       ),
                     ],
@@ -544,11 +555,12 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
               style: TextStyle(color: Colors.black54),
             ),
             const SizedBox(height: 12),
-            StreamBuilder(
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: _service.getBookings(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: Padding(
+                  return const Center(
+                      child: Padding(
                     padding: EdgeInsets.all(24),
                     child: CircularProgressIndicator(),
                   ));
@@ -563,11 +575,13 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                       padding: EdgeInsets.all(24),
                       child: Column(
                         children: [
-                          Icon(Icons.event_busy, size: 48, color: Colors.black38),
+                          Icon(Icons.event_busy,
+                              size: 48, color: Colors.black38),
                           SizedBox(height: 12),
                           Text(
                             'No bookings yet',
-                            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 16),
                           ),
                           SizedBox(height: 6),
                           Text(
@@ -586,10 +600,13 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                     .toList();
 
                 final upcomingCount = bookings
-                    .where((booking) => booking.status == 'Upcoming' || booking.status == 'Rescheduled')
+                    .where((booking) =>
+                        booking.status == 'Upcoming' ||
+                        booking.status == 'Rescheduled')
                     .length;
-                final completedCount =
-                    bookings.where((booking) => booking.status == 'Completed').length;
+                final completedCount = bookings
+                    .where((booking) => booking.status == 'Completed')
+                    .length;
 
                 return Column(
                   children: [
@@ -635,13 +652,15 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                                       color: const Color(0xFFF3E8FF),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    child: const Icon(Icons.build_circle_outlined,
+                                    child: const Icon(
+                                        Icons.build_circle_outlined,
                                         color: Color(0xFF7C3AED)),
                                   ),
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           booking.serviceType,
@@ -653,16 +672,26 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                                         const SizedBox(height: 4),
                                         Text(
                                           '${booking.vehicleName} • ${booking.vehicleNumber}',
-                                          style: const TextStyle(color: Colors.black54),
+                                          style: const TextStyle(
+                                              color: Colors.black54),
                                         ),
                                         const SizedBox(height: 6),
                                         Wrap(
                                           spacing: 8,
                                           runSpacing: 8,
                                           children: [
-                                            _tag(booking.packageType, const Color(0xFFF3E8FF), const Color(0xFF6D28D9)),
-                                            _tag(booking.garageName, const Color(0xFFE0F2FE), const Color(0xFF0369A1)),
-                                            _tag(booking.status, statusColor.withOpacity(.15), statusColor),
+                                            _tag(
+                                                booking.packageType,
+                                                const Color(0xFFF3E8FF),
+                                                const Color(0xFF6D28D9)),
+                                            _tag(
+                                                booking.garageName,
+                                                const Color(0xFFE0F2FE),
+                                                const Color(0xFF0369A1)),
+                                            _tag(
+                                                booking.status,
+                                                statusColor.withOpacity(.15),
+                                                statusColor),
                                           ],
                                         ),
                                       ],
@@ -671,8 +700,10 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                                 ],
                               ),
                               const SizedBox(height: 14),
-                              _detailRow(Icons.person_outline, booking.customerName),
-                              _detailRow(Icons.phone_outlined, booking.customerPhone),
+                              _detailRow(
+                                  Icons.person_outline, booking.customerName),
+                              _detailRow(
+                                  Icons.phone_outlined, booking.customerPhone),
                               _detailRow(
                                 Icons.schedule,
                                 DateFormat('EEE, dd MMM yyyy • hh:mm a')
@@ -687,19 +718,22 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                                 'Estimated LKR ${booking.estimatedPrice.toStringAsFixed(0)}',
                               ),
                               if (booking.notes.isNotEmpty)
-                                _detailRow(Icons.sticky_note_2_outlined, booking.notes),
+                                _detailRow(Icons.sticky_note_2_outlined,
+                                    booking.notes),
                               const SizedBox(height: 12),
                               Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: [
                                   OutlinedButton.icon(
-                                    onPressed: () => _rescheduleBooking(booking),
+                                    onPressed: () =>
+                                        _rescheduleBooking(booking),
                                     icon: const Icon(Icons.edit_calendar),
                                     label: const Text('Reschedule'),
                                   ),
                                   OutlinedButton.icon(
-                                    onPressed: () => NotificationService().showInstantReminder(
+                                    onPressed: () => NotificationService()
+                                        .showInstantReminder(
                                       title: 'Manual reminder',
                                       body:
                                           '${booking.serviceType} for ${booking.vehicleName} is booked for ${DateFormat('dd MMM, hh:mm a').format(booking.appointmentDateTime)}.',
@@ -710,14 +744,17 @@ class _BookingFuelScreenState extends State<BookingFuelScreen> {
                                   FilledButton.tonalIcon(
                                     onPressed: booking.status == 'Completed'
                                         ? null
-                                        : () => _updateStatus(booking, 'Completed'),
-                                    icon: const Icon(Icons.check_circle_outline),
+                                        : () =>
+                                            _updateStatus(booking, 'Completed'),
+                                    icon:
+                                        const Icon(Icons.check_circle_outline),
                                     label: const Text('Complete'),
                                   ),
                                   FilledButton.tonalIcon(
                                     onPressed: booking.status == 'Cancelled'
                                         ? null
-                                        : () => _updateStatus(booking, 'Cancelled'),
+                                        : () =>
+                                            _updateStatus(booking, 'Cancelled'),
                                     icon: const Icon(Icons.cancel_outlined),
                                     label: const Text('Cancel'),
                                   ),
@@ -794,7 +831,8 @@ class _BookingHeroCard extends StatelessWidget {
           colors: [Color(0xFF6D28D9), Color(0xFF9333EA), Color(0xFFC084FC)],
         ),
         boxShadow: const [
-          BoxShadow(color: Color(0x336D28D9), blurRadius: 24, offset: Offset(0, 10)),
+          BoxShadow(
+              color: Color(0x336D28D9), blurRadius: 24, offset: Offset(0, 10)),
         ],
       ),
       child: Column(
@@ -808,7 +846,8 @@ class _BookingHeroCard extends StatelessWidget {
                   color: Colors.white.withOpacity(.18),
                   borderRadius: BorderRadius.circular(18),
                 ),
-                child: const Icon(Icons.notifications_active, color: Colors.white),
+                child:
+                    const Icon(Icons.notifications_active, color: Colors.white),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -845,7 +884,8 @@ class _BookingHeroCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: _heroStat('Est. cost', 'LKR ${estimatedPrice.toStringAsFixed(0)}'),
+                child: _heroStat(
+                    'Est. cost', 'LKR ${estimatedPrice.toStringAsFixed(0)}'),
               ),
             ],
           ),
@@ -868,7 +908,8 @@ class _BookingHeroCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             value,
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w800),
           ),
         ],
       ),
@@ -948,7 +989,8 @@ class _MiniStatCard extends StatelessWidget {
               Text(label, style: const TextStyle(color: Colors.black54)),
               Text(
                 value,
-                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
               ),
             ],
           ),
