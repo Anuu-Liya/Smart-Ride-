@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class BookingScreen extends StatefulWidget {
-  const BookingScreen({super.key}); // Added named key to fix warning
+  const BookingScreen({super.key}); 
 
   @override
   State<BookingScreen> createState() => _BookingScreenState();
@@ -24,7 +24,7 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch data once on initialization for better performance
+    
     _userDataFuture = FirebaseFirestore.instance.collection('users').doc(uid).get();
   }
 
