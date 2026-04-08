@@ -4,7 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // Import Screens
 import 'booking_screen.dart';
+import 'review_screen.dart';
 import 'add_fuel_screen.dart';
+import 'add_vehicle.dart';
+import 'add_service.dart';
 import 'service_history.dart';
 import 'profile_screen.dart';
 import 'login_screen.dart';
@@ -45,8 +48,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   if (!mounted) return;
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        (route) => false,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                    (route) => false,
                   );
                 },
               ),
@@ -65,7 +69,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 color: Colors.white,
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignUpScreen()));
                 },
               ),
             ],
@@ -83,7 +90,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
-        title: const Text("Login Another Account", style: TextStyle(color: Colors.green, fontSize: 18)),
+        title: const Text("Login Another Account",
+            style: TextStyle(color: Colors.green, fontSize: 18)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -93,7 +101,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: const InputDecoration(
                 labelText: "Email",
                 labelStyle: TextStyle(color: Colors.white70),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24)),
               ),
             ),
             TextField(
@@ -103,13 +112,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               decoration: const InputDecoration(
                 labelText: "Password",
                 labelStyle: TextStyle(color: Colors.white70),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white24)),
               ),
             ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel")),
           ElevatedButton(
             onPressed: () async {
               try {
@@ -120,7 +132,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 if (!mounted) return;
                 Navigator.pop(context);
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error: ${e.toString()}")));
               }
             },
             child: const Text("Login"),
@@ -130,10 +143,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildAccountOption({required IconData icon, required String title, required Color color, required VoidCallback onTap}) {
+  Widget _buildAccountOption(
+      {required IconData icon,
+      required String title,
+      required Color color,
+      required VoidCallback onTap}) {
     return ListTile(
       leading: Icon(icon, color: color),
-      title: Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w500)),
+      title: Text(title,
+          style: TextStyle(color: color, fontWeight: FontWeight.w500)),
       onTap: onTap,
     );
   }
@@ -143,10 +161,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.uid)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: Colors.green));
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.green));
           }
 
           var userData = snapshot.data?.data() as Map<String, dynamic>? ?? {};
@@ -165,12 +187,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text("Smart Ride Dashboard",
-                        style: TextStyle(color: Colors.green, fontSize: 18, fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold)),
                     Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.person_pin, color: Colors.green, size: 28),
-                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen())),
+                          icon: const Icon(Icons.person_pin,
+                              color: Colors.green, size: 28),
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ProfileScreen())),
                         ),
                         const SizedBox(width: 5),
                         IconButton(
@@ -183,7 +212,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 const SizedBox(height: 20),
                 Text("Hello, ${userData['firstName'] ?? 'User'}!",
-                    style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold)),
 
                 const SizedBox(height: 20),
 
@@ -193,17 +225,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                    border:
+                        Border.all(color: Colors.green.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.directions_car, size: 40, color: Colors.yellow),
+                      const Icon(Icons.directions_car,
+                          size: 40, color: Colors.yellow),
                       const SizedBox(width: 15),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(vehicleName, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                          Text(plateNo, style: const TextStyle(color: Colors.white54, fontSize: 14)),
+                          Text(vehicleName,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)),
+                          Text(plateNo,
+                              style: const TextStyle(
+                                  color: Colors.white54, fontSize: 14)),
                         ],
                       ),
                     ],
@@ -219,7 +259,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   decoration: BoxDecoration(
                     color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                    border:
+                        Border.all(color: Colors.green.withValues(alpha: 0.3)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +271,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           SizedBox(width: 10),
                           Text(
                             "Daily Maintenance Tip",
-                            style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 14),
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14),
                           ),
                         ],
                       ),
@@ -239,7 +283,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         vehicleType == "Petrol"
                             ? "Regularly check your spark plugs for better fuel efficiency."
                             : "Monitor your battery health and charging ports frequently.",
-                        style: const TextStyle(color: Colors.white, fontSize: 15, height: 1.4),
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 15, height: 1.4),
                       ),
                     ],
                   ),
@@ -249,7 +294,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                 // Monthly Fuel Cost
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(15),
@@ -259,33 +305,88 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       const Row(
                         children: [
-                          Icon(Icons.account_balance_wallet, color: Colors.pink, size: 20),
+                          Icon(Icons.account_balance_wallet,
+                              color: Colors.pink, size: 20),
                           SizedBox(width: 10),
-                          Text("Monthly Fuel Cost", style: TextStyle(color: Colors.white)),
+                          Text("Monthly Fuel Cost",
+                              style: TextStyle(color: Colors.white)),
                         ],
                       ),
                       Text("${monthlyCost.toStringAsFixed(0)} LKR",
-                          style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                          style: const TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
 
                 const SizedBox(height: 30),
-                const Text("Quick Actions", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+                const Text("Quick Actions",
+                    style: TextStyle(
+                        color: Colors.green, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 15),
 
-                _buildActionItem("Book a Service", Icons.calendar_today, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const BookingScreen()))),
-                _buildActionItem("Add Fuel Record", Icons.add_circle_outline, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFuelScreen()))),
-                _buildActionItem("Service History", Icons.history, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ServiceHistoryScreen()))),
+                _buildActionItem(
+                    "Book a Service",
+                    Icons.calendar_today,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const BookingFuelScreen()))),
+                _buildActionItem(
+                    "Add Vehicle",
+                    Icons.directions_car,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddVehiclePage()))),
+                _buildActionItem(
+                    "Add Service",
+                    Icons.engineering,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddServicePage()))),
+                _buildActionItem(
+                    "Review Bookings",
+                    Icons.calendar_today,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ReviewScreen(
+                                garageId: 'default_garage')))),
+                _buildActionItem(
+                    "Add Fuel Record",
+                    Icons.add_circle_outline,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddFuelScreen()))),
+                _buildActionItem(
+                    "Service History",
+                    Icons.history,
+                    () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const ServiceHistoryScreen()))),
 
-                _buildActionItem("Maintenance Tips", Icons.lightbulb_outline, () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => MaintenanceTipsScreen(vehicleType: vehicleType),
-                  ));
+                _buildActionItem("Maintenance Tips", Icons.lightbulb_outline,
+                    () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MaintenanceTipsScreen(vehicleType: vehicleType),
+                      ));
                 }),
 
-                _buildActionItem("Find Nearby Mechanic", Icons.map_outlined, () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NearbyGaragesScreen()));
+                _buildActionItem("Find Nearby Mechanic", Icons.map_outlined,
+                    () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NearbyGaragesScreen()));
                 }),
               ],
             ),
@@ -306,8 +407,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: ListTile(
           onTap: onTap,
           leading: Icon(icon, color: Colors.green),
-          title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 14)),
-          trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white24, size: 15),
+          title: Text(title,
+              style: const TextStyle(color: Colors.white, fontSize: 14)),
+          trailing: const Icon(Icons.arrow_forward_ios,
+              color: Colors.white24, size: 15),
         ),
       ),
     );
